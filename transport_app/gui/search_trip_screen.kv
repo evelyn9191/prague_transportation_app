@@ -1,0 +1,220 @@
+<TripSearchScreen@Screen>:
+    name: "search_trip_screen"
+
+    GridLayout:
+
+        cols: 1
+
+        Header:
+            Label:
+                id: app_title
+                text: "Prague Transportation App"
+                font_size: 20
+
+        MatchedStops:
+            id: matched_stops
+
+        BoxLayout:
+            orientation: "horizontal"
+
+            DatePicker:
+                id: travel_date
+                pHint: .3, .3
+
+            TripTime:
+                id: time_string
+
+            TravelTime:
+                id: travel_time_option
+
+        TextInput:
+            id: stop_included
+            hint_text: "Via"
+            multiline: False
+
+        BoxLayout:
+            Label:
+                text: "Maximum transfers"
+
+            Spinner:
+                id: transfer_counts
+                text: "6"
+                values: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+
+            LowFloorLines:
+                id: low_floor_lines
+
+        TransportModes:
+            id: transport_modes
+
+        SearchButton:
+            id: search_button
+            on_press:
+                self.disable()
+                excluded_travel_modes = transport_modes.get_excluded_modes([
+                transport_modes.ids.mode_tram_checkbox.active,
+                transport_modes.ids.mode_metro_checkbox.active,
+                transport_modes.ids.mode_bus_checkbox.active,
+                transport_modes.ids.mode_train_checkbox.active,
+                transport_modes.ids.mode_ship_checkbox.active])
+                search_button.start_search(matched_stops.ids.departure_stop.text, matched_stops.ids.arrival_stop.text,\
+                time_string.ids.time.text, travel_date.text, travel_time_option.dept_time.active, travel_time_option.arr_time.active,\
+                stop_included.text, transfer_counts.text, excluded_travel_modes,\
+                low_floor_lines.ids.low_floor_lines_only.active)
+
+            on_release:
+                app.root.current = "found_trips_screen" if not search_button.disabled else "search_trip_screen"
+
+<Header@BoxLayout>:
+    canvas:
+        Color:
+            rgba: 0.37, 0.56, 0.74, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<MatchedStops>:
+    id: matched_departure_stops
+    orientation: "vertical"
+
+    DepartureStopName:
+        id: departure_stop
+        hint_text: "Departure stop"
+        multiline: False
+        on_text:
+            print(self.stop_name_chosen)
+            root.find_stop(departure_stop.text)
+            print(self.stop_name)
+            self.text = self.stop_name if self.stop_name_chosen else self.text
+
+    RecycleView:
+        viewclass: 'SelectableLabel'
+        data: [{'text': str(x[0])} for x in root.stops_data]
+        SelectableRecycleGridLayout:
+            cols: 1
+            default_size: None, dp(26)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+
+    ArrivalStopName:
+        id: arrival_stop
+        hint_text: "Arrival stop"
+        multiline: False
+        on_text:
+            root.find_stop(arrival_stop.text)
+        text: self.stop_name if self.stop_name_chosen else self.text
+
+    RecycleView:
+        viewclass: 'SelectableLabel'
+        data: [{'text': str(x[0])} for x in root.stops_data]
+        SelectableRecycleGridLayout:
+            cols: 1
+            default_size: None, dp(26)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+
+<TripTime>:
+    TextInput:
+        id: time
+        hint_text: "Time"
+        text: root.get_current_time()
+        multiline: False
+
+<TravelTime>:
+    id: travel_time_option
+    dept_time: departure_time
+    arr_time: arrival_time
+
+    Label:
+        text: "Departure"
+    OneChoiceRadioButton:
+        id: departure_time
+        active: True
+        group: "travel_time"
+        value: travel_time_option.dept_time
+    Label:
+        text: "Arrival"
+    OneChoiceRadioButton:
+        id: arrival_time
+        active: False
+        group: "travel_time"
+        value: travel_time_option.arr_time
+
+<TransportModes>:
+    cols: 2
+    orientation: "horizontal"
+    id: transport_modes
+
+    Label:
+        id: mode_metro_label
+        text: "Metro"
+    CheckBox:
+        id: mode_metro_checkbox
+        active: True
+
+    Label:
+        id: mode_tram_label
+        text: "Tram"
+    CheckBox:
+        id: mode_tram_checkbox
+        active: True
+
+    Label:
+        id: mode_bus_label
+        text: "Bus"
+    CheckBox:
+        id: mode_bus_checkbox
+        active: True
+
+    Label:
+        id: mode_train_label
+        text: "Train"
+    CheckBox:
+        id: mode_train_checkbox
+        active: True
+
+    Label:
+        id: mode_ship_label
+        text: "Ship"
+    CheckBox:
+        id: mode_ship_checkbox
+        active: True
+
+<LowFloorLines>:
+    cols: 2
+    id: low_floor_lines
+
+    Label:
+        id: low_floor_lines_only_label
+        text: "Low-floor lines only"
+    CheckBox:
+        id: low_floor_lines_only
+        active: False
+
+<SearchButton>:
+    id: search_button
+    text: "Search connection"
+    font_size: 16
+    background_color: 1.37, 1.96, 2.44, 1
+    on_press: search_button.disable()
+    on_release: search_button.update()
+
+<ErrorPopup@Popup>:
+    title: "Incorrect input"
+
+    BoxLayout:
+        orientation: "vertical"
+        cols: 1
+
+        Label:
+            text: root.error_message
+            size_hint: 0.6, 0.7
+            pos_hint: {"x": 0.2, "top": 1}
+
+        Button:
+            text: "OK"
+            size_hint: 1, 0.3
+            pos_hint: {"x": 0, "y": 0.1}
+            on_release: root.dismiss()
