@@ -15,5 +15,4 @@ marshmallow_sqlalchemy
 sqlalchemy
 python-dateutil
 gtfspy
-pytest
 sqlalchemy_utils
