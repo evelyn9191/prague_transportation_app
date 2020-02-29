@@ -16,14 +16,14 @@ Following file needs to be downloaded:
 
 `PID_GTFS.zip` - can be downloaded from the <a href="http://data.pid.cz/PID_GTFS.zip">PID Open Data server</a>. Store it in the `data` folder.
 
-### How to run
+## Run the script
 
 1. download the file mentioned above
 
-2. install dependencies from `requirements.txt`
+2. install `gtfspy` from my forked repo: `pip install -e git+git@github.com:evelyn9191/gtfspy.git@master#egg=gtfspy`
 
-3. install `gtfspy` from my forked repo: `pip install -e git+git@github.com:evelyn9191/gtfspy.git@master#egg=gtfspy`
+3. install dependencies from `requirements.txt`
 
-4. Run `import_gtfs_data.py` to create the database for the first time
+4. Run `import_gtfs_data.py` to create the database and import the data
 
 5. Run `search_trip_screen.py` to run the app.
