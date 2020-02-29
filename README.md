@@ -5,7 +5,7 @@ Internet connection is not necessary to search for the transportation data.
 Provider of the open traffic data: <a href="https://pid.cz/">PID</a>.
 
 ## Compatibility
-Compatible with Python 3.7. Tested on Windows 10.
+Compatible with Python 3.7 (due to pypiwin32 library). Tested on Windows 10.
 
 ## Version
 This is version 0.0.1. Development is ongoing.
@@ -20,10 +20,8 @@ Following file needs to be downloaded:
 
 1. download the file mentioned above
 
-2. install `gtfspy` from my forked repo: `pip install -e git+git@github.com:evelyn9191/gtfspy.git@master#egg=gtfspy`
+2. install dependencies from `requirements.txt`
 
-3. install dependencies from `requirements.txt`
+3. Run `import_gtfs_data.py` to create the database and import the data
 
-4. Run `import_gtfs_data.py` to create the database and import the data
-
-5. Run `search_trip_screen.py` to run the app.
+4. Run `search_trip_screen.py` to run the app.

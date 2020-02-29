@@ -14,5 +14,5 @@ marshmallow
 marshmallow_sqlalchemy
 sqlalchemy
 python-dateutil
-gtfspy
+-e git+git@github.com:evelyn9191/gtfspy.git@master#egg=gtfspy
 sqlalchemy_utils
