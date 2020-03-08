@@ -1,3 +1,4 @@
+freezegun
 requests
 kivy
 docutils
@@ -10,6 +11,8 @@ kivy-deps.angle
 kivy-garden
 KivyCalendar
 pytz
+pytest
+requests-mock
 marshmallow
 marshmallow_sqlalchemy
 sqlalchemy

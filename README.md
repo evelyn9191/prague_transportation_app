@@ -18,10 +18,10 @@ Following file needs to be downloaded:
 
 ## Run the script
 
-1. download the file mentioned above
+1. Install dependencies from `requirements.txt`
 
-2. install dependencies from `requirements.txt`
+2. Run `download_gtfs_zip.py` to download the latest transport data.
 
-3. Run `import_gtfs_data.py` to create the database and import the data
+3. Run `import_gtfs_data.py` to create the database and import the transport data.
 
 4. Run `search_trip_screen.py` to run the app.
