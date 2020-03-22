@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y g++ gcc libpq-dev --no-install-recommen
 COPY . ./
 ENV PYTHONPATH=${PYTHONPATH}:`pwd`
 
-CMD ["python", "run.py"]
+CMD ["python", "transport_app/gui/search_trip_screen.py"]
