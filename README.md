@@ -25,3 +25,22 @@ Following file needs to be downloaded:
 
 
 3. Run `transport_app/gui/search_trip_screen.py` to run the app.
+
+## To do
+### Frontend
+* fix choosing the correct stop when searching for a connection
+* fix Datepicker usage in the code
+* use Datepicker for choosing date and time
+* apply the choosing functionality to the *via stops*, too
+* add the screen for viewing search results
+* add the screen for viewing details of an individual search result
+* add the screen used when updating transport data
+* make the app look pretty
+* add menu
+### Backend
+* create the algorithm for stops searching
+* return search results to frontend
+* run the data update only if the user is connected to wifi
+* improve current logging logic (substitute it with a db table?)
+* handle errors
+* enable build to .apkg
