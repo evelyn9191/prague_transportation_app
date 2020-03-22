@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from datetime import datetime
 
 import requests
@@ -45,16 +46,20 @@ def download_traffic_source() -> None:
         f.write(traffic_file.content)
 
 
-def import_gtfs_data(verbose=True):
+def import_gtfs_data(verbose=True) -> bool:
     import_gtfs.import_gtfs(
         [config.TRANSPORT_DATA_ZIP], config.DB_NAME, print_progress=verbose, location_name="Prague",
     )
     g = gtfs.GTFS(config.DB_NAME)
     g.meta["download_date"] = datetime.today().date()
+    return True
 
 
 if __name__ == "__main__":
     data_updated = get_latest_transport_data()
     if data_updated:
-        import_gtfs_data()
-    logger.debug("Transport data updated.")
+        data_imported = import_gtfs_data()
+        logger.debug("Transport data updated.")
+        if data_imported:
+            os.unlink(config.TRANSPORT_DATA_ZIP)
+            logger.debug("Transport data ZIP deleted.")
