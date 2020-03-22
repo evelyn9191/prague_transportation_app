@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 
-SQLALCHEMY_DATABASE_URI = os.getenv("SQL_DATABASE_URI", "sqlite:///..\\transport.db",)
+DB_NAME = "transport.db"
+SQLALCHEMY_DATABASE_URI = os.getenv("SQL_DATABASE_URI", f"sqlite:///..\\{DB_NAME}")
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 ROOT_DIR = Path(__file__).absolute().parents[1]

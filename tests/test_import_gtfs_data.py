@@ -7,7 +7,7 @@ from freezegun import freeze_time
 
 from tests import MOCK_DATA, MOCK_ZIP_FILE
 from transport_app import config
-from transport_app.download_gtfs_zip import check_latest_gtfs_zip, download_traffic_source
+from transport_app.import_gtfs_data import get_latest_transport_data, download_traffic_source
 
 config.TRANSPORT_DATA_URL = "httpmock://gtfs_source.xz"
 config.TRANSPORT_DATA_ZIP = MOCK_DATA / "mock_downloaded_gtfs.zip"
@@ -23,17 +23,19 @@ class TestDownloadNewGTFSZip:
         requests_mock.get(
             config.TRANSPORT_DATA_URL, content=MOCK_ZIP_FILE, status_code=200,
         )
-        with mock.patch("transport_app.download_gtfs_zip.logger") as mock_logger:
-            check_latest_gtfs_zip()
+        with mock.patch("transport_app.import_gtfs_data.logger") as mock_logger:
+            updated_data = get_latest_transport_data()
             mock_logger.info.assert_called_once_with("ZIP download success")
+            assert updated_data is True
         os.unlink(config.TRANSPORT_DATA_ZIP)
 
     @freeze_time(f"{today} {after_six}")
     def test_check_latest_gtfs_zip_imported_already(self):
         last_download = f"{self.today.strftime(config.LOG_TIME_FORMAT)} {self.after_six}"
         create_log(last_download)
-        check_latest_gtfs_zip()
+        updated_data = get_latest_transport_data()
         self._assert_last_log(last_download)
+        assert updated_data is False
 
     @freeze_time(f"{today} {after_six}")
     def test_check_latest_gtfs_zip_old_import(self, requests_mock):
@@ -42,8 +44,9 @@ class TestDownloadNewGTFSZip:
             config.TRANSPORT_DATA_URL, content=MOCK_ZIP_FILE, status_code=200,
         )
         create_log(last_download)
-        check_latest_gtfs_zip()
+        updated_data = get_latest_transport_data()
         self._assert_last_log(last_download)
+        assert updated_data is True
 
         os.unlink(config.TRANSPORT_DATA_ZIP)
         with open(config.ZIP_DOWNLOAD_LOG, "r+") as logs_file:
